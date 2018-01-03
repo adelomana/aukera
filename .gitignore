@@ -1,2 +1,6 @@
 
 *.pdf
+
+extra/expression/pipeline.kallisto/.Rhistory
+
+*.png

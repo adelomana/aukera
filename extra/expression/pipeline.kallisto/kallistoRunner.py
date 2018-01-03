@@ -12,13 +12,12 @@ def caller(element):
 
     tag=element.split('.fastq')[0]
     
-    cmd='time kallisto quant -i {} -o {}{} --bias --plaintext --single -l 180 -s 20 -t 4 -b 100 {}{}'.format(transcriptomeIndex,quantDir,tag,fastqDir,element)
+    cmd='time kallisto quant -i {} -o {}{} --bias --plaintext --single -l 180 -s 20 -t 4 -b {} {}{}'.format(transcriptomeIndex,quantDir,tag,boots,fastqDir,element)
 
     print()
     print(cmd)
     print()
 
-    sys.exit()
     os.system(cmd)
     
     return None
@@ -27,10 +26,13 @@ def caller(element):
 
 # 0. user defined variables
 fastqDir='/Volumes/omics4tb/alomana/projects/TLR/data/cleanFASTQ/'
-quantDir='/Volumes/omics4tb/alomana/projects/TLR/data/kallisto/'
 transcriptomeIndex='/Volumes/omics4tb/alomana/projects/TLR/data/transcriptome/hsa.ASM680v1.20170116.idx'
 transcriptomeFastaFile='/Volumes/omics4tb/alomana/projects/TLR/data/transcriptome/hsa.ASM680v1.fasta'
-resultsDir='/Volumes/omics4tb/alomana/projects/TLR/data/expression/'
+
+quantDir='/Volumes/omics4tb/alomana/projects/TLR/data/kallisto1e3/'
+resultsDir='/Volumes/omics4tb/alomana/projects/TLR/data/expression1e3/'
+
+boots=int(1e3)
 
 # 1. reading files
 print('reading files...')
@@ -56,10 +58,10 @@ with open(transcriptomeFastaFile,'r') as f:
 
             synonyms[id]=name
 
-# 2. processing 
-### print('processing files...')
-### for element in files:
-###     caller(element)
+# 2. processing
+print('processing files...')
+for element in files:
+    caller(element)
 
 # 3. generating full expression matrix
 print('generating expression matrix file...')
@@ -190,3 +192,5 @@ for i in range(len(new)):
 matplotlib.pyplot.savefig('figure.tSNE.png')
 matplotlib.pyplot.clf()
 print()
+
+print('... all done.')
