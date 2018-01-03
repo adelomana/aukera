@@ -12,7 +12,7 @@ def caller(element):
 
     tag=element.split('.fastq')[0]
     
-    cmd='time kallisto quant -i {} -o {}{} --bias --plaintext --single -l 180 -s 20 -t 4 -b {} {}{}'.format(transcriptomeIndex,quantDir,tag,boots,fastqDir,element)
+    cmd='time kallisto quant -i {} -o {}{} --bias --single -l 180 -s 20 -t 4 -b {} {}{}'.format(transcriptomeIndex,quantDir,tag,boots,fastqDir,element)
 
     print()
     print(cmd)
@@ -29,10 +29,16 @@ fastqDir='/Volumes/omics4tb/alomana/projects/TLR/data/cleanFASTQ/'
 transcriptomeIndex='/Volumes/omics4tb/alomana/projects/TLR/data/transcriptome/hsa.ASM680v1.20170116.idx'
 transcriptomeFastaFile='/Volumes/omics4tb/alomana/projects/TLR/data/transcriptome/hsa.ASM680v1.fasta'
 
-quantDir='/Volumes/omics4tb/alomana/projects/TLR/data/kallisto1e3/'
-resultsDir='/Volumes/omics4tb/alomana/projects/TLR/data/expression1e3/'
-
 boots=int(1e3)
+
+quantDir='/Volumes/omics4tb/alomana/projects/TLR/data/kallisto1e{}/'.format(int(numpy.log10(boots)))
+resultsDir='/Volumes/omics4tb/alomana/projects/TLR/data/expression1e{}/'.format(int(numpy.log10(boots)))
+
+if os.path.exists(quantDir) == False:
+    os.mkdir(quantDir)
+
+if os.path.exists(resultsDir) == False:
+    os.mkdir(resultsDir)
 
 # 1. reading files
 print('reading files...')
