@@ -6,46 +6,29 @@ def cuffdiffCaller():
     this function calls cuffdiff using specific conditions
     '''
 
-    # working on tp1 vs tp4
-    outputDir=cufflinksDir+'tp4.vs.tp1'
+    # RBF, working on tp1 vs tp4
+    outputDir=cufflinksDir+'RBF.tp4.vs.tp1'
+    controlFiles=[element for element in abundanceFiles if 'tp.1' in element and 'rbf' in element]
+    sampleFiles=[element for element in abundanceFiles if 'tp.4' in element and 'rbf' in element]
+
+    term1='time cuffdiff %s '%(gtfFile)
+    term2=','.join(controlFiles)+' '+','.join(sampleFiles)+' '
+    term3='-o %s '%outputDir
+    term4='-p %s '%numberOfThreads
+    term5='--library-type fr-firststrand '
+    cmd=term1+term2+term3+term4+term5
+    
+    print('')
+    print(cmd)
+    print('')
+
+    os.system(cmd)
+
+
+    # RNA, working on tp1 vs tp4
+    outputDir=cufflinksDir+'RNA.tp4.vs.tp1'
     controlFiles=[element for element in abundanceFiles if 'tp.1' in element and 'trna' in element]
     sampleFiles=[element for element in abundanceFiles if 'tp.4' in element and 'trna' in element]
-
-    term1='time cuffdiff %s '%(gtfFile)
-    term2=','.join(controlFiles)+' '+','.join(sampleFiles)+' '
-    term3='-o %s '%outputDir
-    term4='-p %s '%numberOfThreads
-    term5='--library-type fr-firststrand '
-    cmd=term1+term2+term3+term4+term5
-    
-    print('')
-    print(cmd)
-    print('')
-
-    os.system(cmd)
-
-    # working on tp1 vs tp3
-    outputDir=cufflinksDir+'tp3.vs.tp1'
-    controlFiles=[element for element in abundanceFiles if 'tp.1' in element and 'trna' in element]
-    sampleFiles=[element for element in abundanceFiles if 'tp.3' in element and 'trna' in element]
-
-    term1='time cuffdiff %s '%(gtfFile)
-    term2=','.join(controlFiles)+' '+','.join(sampleFiles)+' '
-    term3='-o %s '%outputDir
-    term4='-p %s '%numberOfThreads
-    term5='--library-type fr-firststrand '
-    cmd=term1+term2+term3+term4+term5
-    
-    print('')
-    print(cmd)
-    print('')
-
-    os.system(cmd)
-
-    # working on tp1 vs tp2
-    outputDir=cufflinksDir+'tp2.vs.tp1'
-    controlFiles=[element for element in abundanceFiles if 'tp.1' in element and 'trna' in element]
-    sampleFiles=[element for element in abundanceFiles if 'tp.2' in element and 'trna' in element]
 
     term1='time cuffdiff %s '%(gtfFile)
     term2=','.join(controlFiles)+' '+','.join(sampleFiles)+' '
@@ -113,11 +96,11 @@ def cuffquantCaller(inputFile):
     return None
 
 # 0. defining input files
-bamFilesDir='/proj/omics4tb/alomana/projects/TLR/data/BAM/'
-cufflinksDir='/proj/omics4tb/alomana/projects/TLR/data/cufflinks/'
-gtfFile='/proj/omics4tb/alomana/projects/TLR/data/genome/hsa.ASM680v1.edited.gff3'
-maskFile='/proj/omics4tb/alomana/projects/TLR/data/genome/mask.gff3'
-numberOfThreads=16
+bamFilesDir='/Volumes/omics4tb/alomana/projects/TLR/data/BAM/'
+cufflinksDir='/Volumes/omics4tb/alomana/projects/TLR/data/cufflinks/'
+gtfFile='/Volumes/omics4tb/alomana/projects/TLR/data/genome/hsa.ASM680v1.edited.gff3'
+maskFile='/Volumes/omics4tb/alomana/projects/TLR/data/genome/mask.gff3'
+numberOfThreads=4
 
 # 1. defining the BAM and abundance files
 roots=os.listdir(bamFilesDir)
@@ -136,4 +119,4 @@ cuffnormCaller()
 
 # 4. calling cuffdiff
 print('calling cuffdiff...')
-#cuffdiffCaller()
+cuffdiffCaller()
