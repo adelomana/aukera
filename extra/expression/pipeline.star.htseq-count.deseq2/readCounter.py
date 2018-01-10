@@ -15,7 +15,8 @@ def htseqCounter(sample):
     flag1='-m union'
     flag2='-f bam'
     flag3='-t gene'
-
+    flag5='-i ID'    
+    
     if 'trna' in sample:
         flag4='-s reverse'
     elif 'rbf' in sample:
@@ -23,8 +24,7 @@ def htseqCounter(sample):
     else:
         print('error a')
         sys.exit()
-
-    flag5='-i ID'
+    
     inputFile=bamFilesDir+sample+'/Aligned.sortedByCoord.out.bam'
     outputDirection='> {}{}.txt'.format(countsDir,sample)
 
@@ -34,6 +34,8 @@ def htseqCounter(sample):
     print(cmd)
     print()
 
+    # make sure you add -r pos flag to compare to Arjun results. and -m intersection-nonempty for RBF
+    
     os.system(cmd)
 
     return None
@@ -44,7 +46,7 @@ def htseqCounter(sample):
 
 # 0. defining user variables
 bamFilesDir='/Volumes/omics4tb/alomana/projects/TLR/data/BAM/'
-countsDir='/Volumes/omics4tb/alomana/projects/TLR/data/counts/'
+countsDir='/Volumes/omics4tb/alomana/projects/TLR/data/countsArjun/'
 genomeAnnotationFile='/Volumes/omics4tb/alomana/projects/TLR/data/genome/hsa.ASM680v1.edited.gff3'
 numberOfThreads=4
 
