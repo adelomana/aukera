@@ -6,22 +6,25 @@ library('DESeq2')
 library('stringr')
 
 # 0. user defined variables
-tag='trna'
+tag='rbf' # trna / rbf
+earlyTimepointName='tp.1'
+lateTimepointName='tp.3'
+comparison='condition_tp.3_vs_tp.1'
 
 setwd("~/github/aukera/extra/expression/pipeline.star.htseq-count.deseq2")
 countsDir="/Volumes/omics4tb/alomana/projects/TLR/data/counts"
 
-DESeqResultsFile=paste("/Volumes/omics4tb/alomana/projects/TLR/data/DESeq2/significance",tag,"csv",sep='.')
-DESeqNormalizedCountsFile=paste('/Volumes/omics4tb/alomana/projects/TLR/data/DESeq2/normalizedCounts',tag,'csv',sep='.')
+DESeqResultsFile=paste("/Volumes/omics4tb/alomana/projects/TLR/data/DESeq2/significance",tag,comparison,"csv",sep='.')
+DESeqNormalizedCountsFile=paste('/Volumes/omics4tb/alomana/projects/TLR/data/DESeq2/normalizedCounts',tag,comparison,'csv',sep='.')
 
 # 1. handle data reading
 sampleIDs=dir(file.path(countsDir))
 
 # 1.1. selecting data files and data names
 sampleSubset=sampleIDs[str_detect(sampleIDs,tag)]
-t1=sampleSubset[str_detect(sampleSubset,"tp.1")]
-t4=sampleSubset[str_detect(sampleSubset,"tp.4")]
-samples=c(t1,t4)
+ti=sampleSubset[str_detect(sampleSubset,earlyTimepointName)]
+tf=sampleSubset[str_detect(sampleSubset,lateTimepointName)]
+samples=c(ti,tf)
 timeCondition=sapply(strsplit(samples,split='.',fixed=TRUE),function(x) (paste('tp',x[5],sep='.')))
 
 # 2. formatting variables
@@ -38,7 +41,7 @@ res=results(dds)
 summary(res)
 
 resultsNames(dds)
-resLFC=lfcShrink(dds,coef="condition_tp.4_vs_tp.1")
+resLFC=lfcShrink(dds,coef=comparison)
 
 res05=results(dds,alpha=0.05)
 summary(res05)
